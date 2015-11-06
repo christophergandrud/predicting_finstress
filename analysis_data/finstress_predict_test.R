@@ -52,8 +52,14 @@ gdp <- WDI(indicator = 'NY.GDP.MKTP.KD.ZG', start = 2003, end = 2011,
            extra = T) %>%
     rename(gdp_growth = NY.GDP.MKTP.KD.ZG)
 
+# Financial Fragility Indicators from Andrianova et al. (2015)
+ff <- import('raw_data/Financial Fragility Database Stata.dta') %>%
+    select(-countryname, -countryid) %>% 
+    dplyr::rename(iso2c = countrycode)
+
 # Merge ------------------------------------------------------------------------
 comb <- merge(gdp, finstress_yr, by = c('iso2c', 'year'))
+comb <- merge(comb, ff, by = c('iso2c', 'year'))
 
 comb_high <- comb %>% filter(income == 'High income: OECD')
 
