@@ -11,7 +11,7 @@ library(DataCombine)
 library(countrycode)
 library(WDI)
 library(plm)
-library(moongazer)
+library(22222)
 
 # Set working directory
 possibles <- c('/git_repositories/predicting_finstress/analysis_data')
