@@ -11,7 +11,7 @@ library(DataCombine)
 library(countrycode)
 library(WDI)
 library(plm)
-library(planetgazer)
+library(moongazer)
 
 # Set working directory
 possibles <- c('/git_repositories/predicting_finstress/analysis_data')
@@ -54,7 +54,7 @@ gdp <- WDI(indicator = 'NY.GDP.MKTP.KD.ZG', start = 2003, end = 2011,
 
 # Financial Fragility Indicators from Andrianova et al. (2015)
 ff <- import('raw_data/Financial Fragility Database Stata.dta') %>%
-    select(-countryname, -countryid) %>% 
+    select(-countryname, -countryid) %>%
     dplyr::rename(iso2c = countrycode)
 
 # Merge ------------------------------------------------------------------------
