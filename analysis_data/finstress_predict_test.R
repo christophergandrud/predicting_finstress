@@ -11,7 +11,7 @@ library(DataCombine)
 library(countrycode)
 library(WDI)
 library(plm)
-library(33333)
+library(stargazer)
 
 # Set working directory
 possibles <- c('/git_repositories/predicting_finstress/analysis_data')
@@ -57,6 +57,8 @@ ff <- import('raw_data/Financial Fragility Database Stata.dta') %>%
     select(-countryname, -countryid) %>%
     dplyr::rename(iso2c = countrycode)
 
+ff$log_imploans <- log(ff$ImpLoans)
+
 # Merge ------------------------------------------------------------------------
 comb <- merge(gdp, finstress_yr, by = c('iso2c', 'year'))
 comb <- merge(comb, ff, by = c('iso2c', 'year'))
@@ -72,12 +74,20 @@ mfull_2 <- plm(finstress_var_lead1yr ~ gdp_growth + finstress_var,
 mfull_3 <- plm(finstress_var_lead1yr ~ gdp_growth + finstress_var +
                    finstress_mean, data = comb_pd)
 
+mfull_4 <- plm(finstress_var_lead1yr ~ finstress_var + log_imploans, 
+               data = comb_pd)
+
 # High Income
 comb_high_pd <- pdata.frame(comb_high, index = c('iso2c', 'year'))
 moecd_1 <- plm(finstress_var_lead1yr ~ gdp_growth, data = comb_high_pd)
 moecd_2 <- plm(finstress_var_lead1yr ~ gdp_growth + finstress_var, data = comb_high_pd)
 moecd_3 <- plm(finstress_var_lead1yr ~ gdp_growth + finstress_var +
                    finstress_mean, data = comb_high_pd)
+
+moecd_4 <- plm(finstress_var_lead1yr ~ finstress_var + log_imploans, 
+               data = comb_high_pd)
+moecd_5 <- plm(finstress_var_lead1yr ~ finstress_var + Liquid, 
+               data = comb_high_pd)
 
 
 stargazer(mfull_1, mfull_2, mfull_3, moecd_1, moecd_2, moecd_3, type = 'text',
