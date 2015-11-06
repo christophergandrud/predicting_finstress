@@ -1,2 +1,7 @@
 # predicting_finstress
-Understanding variance in financial market stress
+
+**Very Early Stage Project**
+
+Tom Pepinsky and Christopher Gandrud
+
+Understanding variance in perceived financial market stress (FinStress). 
