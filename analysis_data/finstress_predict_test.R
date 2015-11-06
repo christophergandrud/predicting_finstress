@@ -1,7 +1,6 @@
 # ---------------------------------------------------------------------------- #
-# Merge FinStress and QoG, run basic regressions
+# Merge FinStress, WDI, OECD, Run basic regressions on FinStress Variance
 # ---------------------------------------------------------------------------- #
-
 
 # Load required packages
 library(repmis)
@@ -15,14 +14,13 @@ library(plm)
 library(stargazer)
 
 # Set working directory
-possibles <- c('~/git_repositories/predicting_finstress/')
+possibles <- c('/git_repositories/predicting_finstress/analysis_data')
 set_valid_wd(possibles)
 
 # Load FinStress -------------------------------------------------
 FinStress <- rio::import("http://bit.ly/1LFEnhM")
 
 # Annual data --------
-
 FinStress$year <- year(FinStress$date)
 
 finstress <- FinStress %>% select(iso2c, date, year, C1_ma) %>%
@@ -85,7 +83,6 @@ stargazer(mfull_1, mfull_2, mfull_3, moecd_1, moecd_2, moecd_3, type = 'text',
 
 #------------------------------------------------------------------------------#
 # Quarterly data ----------------------
-
 finstress <- FinStress %>% select(iso2c, date, C1_ma) %>%
     rename(finstress = C1_ma) %>% rename(quarter = date)
 
