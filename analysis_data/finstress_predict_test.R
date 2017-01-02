@@ -18,7 +18,7 @@ possibles <- c('/git_repositories/predicting_finstress/analysis_data')
 set_valid_wd(possibles)
 
 # Load FinStress -------------------------------------------------
-FinStress <- rio::import("http://bit.ly/1LFEnhM")
+FinStress <- rio::import("http://bit.ly/1LFEnhM", format = 'csv')
 
 # Annual data --------
 FinStress$year <- year(FinStress$date)
@@ -71,7 +71,7 @@ finstress_yr <- slide(finstress_yr, Var = 'finstress_mean', GroupVar = 'iso2c',
 # Download WDI gdp change & Stock Price Volatility -----------------------------
 wdi <- WDI(indicator = c('NY.GDP.MKTP.KD.ZG', 'PA.NUS.FCRF', 'GFDD.SM.01',
                          'GFDD.OM.02'), 
-           start = 2003, end = 2011, extra = T) %>%
+           start = 2000, end = 2013, extra = T) %>%
     rename(gdp_growth = NY.GDP.MKTP.KD.ZG) %>% 
     rename(exchange_rate_usd = PA.NUS.FCRF) %>%
     rename(stock_price_volatility = GFDD.SM.01) %>%
@@ -99,7 +99,7 @@ comb <- merge(finstress_yr, wdi, by = c('iso2c', 'year'), all.x = T)
 comb <- merge(comb, ff, by = c('iso2c', 'year'), all.x = T)
 comb <- merge(comb, lv, by = c('iso2c', 'year'), all.x = T)
 
-FindDups(comb, c('iso2c', 'year'))
+comb <- FindDups(comb, c('iso2c', 'year'), NotDups = TRUE)
 comb <- comb %>% filter(!is.na(iso2c))
 
 # Save basic data ---------
@@ -121,8 +121,6 @@ mfull_3 <- plm(finstress_var_lead1yr ~ finstress_var + finstress_mean +
                    stock_price_volatility, data = comb_pd)
 ## CAMELS
 mfull_4 <- plm(finstress_var_lead1yr ~ finstress_var + log_imploans, 
-               data = comb_pd)
-mfull_5 <- plm(finstress_var_lead1yr ~ finstress_var + Liquid, 
                data = comb_pd)
 
 # Using Stand. Dev. instead of Variance
@@ -152,8 +150,6 @@ moecd_3 <- plm(finstress_var_lead1yr ~ finstress_var +
 ## CAMELS
 moecd_4 <- plm(finstress_var_lead1yr ~ finstress_var + log_imploans, 
                data = comb_high_pd)
-moecd_5 <- plm(finstress_var_lead1yr ~ finstress_var + Liquid, 
-               data = comb_high_pd)
 
 # Using Stand. Dev. instead of Variance
 mfull_1_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth, 
@@ -161,8 +157,6 @@ mfull_1_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth,
 mfull_2_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth +
                       finstress_mean, data = comb_pd)
 mfull_3_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + log_imploans, 
-                  data = comb_pd)
-mfull_4_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + Liquid, 
                   data = comb_pd)
 
 moecd_1_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth, 
@@ -172,20 +166,18 @@ moecd_2_sd <- plm(finstress_sd_lead1yr ~ finstress_var + gdp_growth  +
 
 moecd_3_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + log_imploans, 
                data = comb_high_pd)
-moecd_4_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + Liquid, 
-               data = comb_high_pd)
 
 ## Annual For Paper ------
-stargazer(mfull_1, mfull_2, mfull_3, mfull_4, mfull_5, 
-          moecd_1, moecd_2, moecd_3, moecd_4, moecd_5, 
+stargazer(mfull_1, mfull_2, mfull_3, mfull_4,
+          moecd_1, moecd_2, moecd_3, moecd_4,
           type = 'latex',
           dep.var.labels = 'Var(FinStress)$_{year+1}$',
           covariate.labels = c('Var(FinStress)$_{year+0}$', 
                                'GDP Growth (\\%)', 'FinStress Mean$_{year}$',
                                'Stock Price Volatility',
-                               'Impaired Loans (log)', 'Liquid Assets Ratio') ,
-          column.labels = c(rep('Full Sample', 5), rep('OECD', 5)),
-          add.lines = list(c('Fixed Effects', rep('y', 10))),
+                               'Impaired Loans (log)') ,
+          column.labels = c(rep('Full Sample', 4), rep('OECD', 4)),
+          add.lines = list(c('Fixed Effects', rep('y', 8))),
           label = 'annual_reg',
           title = 'Regression result from predicting FinStress Variance using annual explanatory variable data',
           out = 'results_tables/annual_regressions.tex',
@@ -194,15 +186,15 @@ stargazer(mfull_1, mfull_2, mfull_3, mfull_4, mfull_5,
           )
 
 ## Annual For Presentation ------
-stargazer(mfull_1, mfull_2, mfull_3, mfull_4, mfull_5, 
+stargazer(mfull_1, mfull_2, mfull_3, mfull_4,
           type = 'latex',
           dep.var.labels = 'Var(FinStress)$_{year+1}$',
           covariate.labels = c('Var(FinStress)$_{year+0}$', 
                                'GDP Growth (\\%)', 'FinStress Mean$_{year}$',
                                'Stock Price Volatility',
-                               'Impaired Loans (log)', 'Liquid Assets Ratio') ,
-          column.labels = c(rep('Full Sample', 5)),
-          add.lines = list(c('Fixed Effects', rep('y', 5))),
+                               'Impaired Loans (log)') ,
+          column.labels = c(rep('Full Sample', 4)),
+          add.lines = list(c('Fixed Effects', rep('y', 4))),
           label = 'annual_reg',
           title = 'Regression result from predicting FinStress Variance using annual explanatory variable data (Full Sample)',
           out = 'results_tables/annual_regressions_all.tex',
@@ -211,15 +203,15 @@ stargazer(mfull_1, mfull_2, mfull_3, mfull_4, mfull_5,
 )
 
 ## Annual For Paper ------
-stargazer(moecd_1, moecd_2, moecd_3, moecd_4, moecd_5, 
+stargazer(moecd_1, moecd_2, moecd_3, moecd_4,
           type = 'latex',
           dep.var.labels = 'Var(FinStress)$_{year+1}$',
           covariate.labels = c('Var(FinStress)$_{year+0}$', 
                                'GDP Growth (\\%)', 'FinStress Mean$_{year}$',
                                'Stock Price Volatility',
                                'Impaired Loans (log)', 'Liquid Assets Ratio') ,
-          column.labels = rep('OECD', 5),
-          add.lines = list(c('Fixed Effects', rep('y', 5))),
+          column.labels = rep('OECD', 4),
+          add.lines = list(c('Fixed Effects', rep('y', 4))),
           label = 'annual_reg',
           title = 'Regression result from predicting FinStress Variance using annual explanatory variable data (OECD Sample)',
           out = 'results_tables/annual_regressions_oecd.tex',
