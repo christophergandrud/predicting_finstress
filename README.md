@@ -1,5 +1,5 @@
-# Predicting Variance in Financial Market Stress
+# Reproduction material for: Predicting Self-Fulfilling Crises
 
-Tom Pepinsky and Christopher Gandrud
+Christopher Gandrud and Thomas B. Pepinsky
 
 Understanding variance in perceived financial market stress (FinStress).
