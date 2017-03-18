@@ -1,0 +1,38 @@
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Sat, Mar 18, 2017 - 14:05:55
+\begin{table}[!htbp] \centering 
+  \caption{Regression result from predicting FinStress Variance using annual explanatory variable data (without lagged dependent variable)} 
+  \label{annual_reg_nolag_dv} 
+\tiny 
+\begin{tabular}{@{\extracolsep{5pt}}lcccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{8}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-9} 
+\\[-1.8ex] & \multicolumn{8}{c}{Var(FinStress)$_{year+1}$} \\ 
+ & Full Sample & Full Sample & Full Sample & Full Sample & OECD & OECD & OECD & OECD \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\ 
+\hline \\[-1.8ex] 
+ GDP Growth (\%) & 0.056$^{**}$ & 0.039$^{*}$ &  &  & 0.343$^{***}$ & 0.210$^{**}$ &  &  \\ 
+  & (0.022) & (0.022) &  &  & (0.082) & (0.089) &  &  \\ 
+  & & & & & & & & \\ 
+ FinStress Mean$_{year}$ &  & $-$4.777$^{***}$ & $-$4.575$^{**}$ &  &  & $-$9.842$^{***}$ & $-$7.498$^{**}$ &  \\ 
+  &  & (1.259) & (2.174) &  &  & (2.992) & (3.252) &  \\ 
+  & & & & & & & & \\ 
+ Stock Price Volatility &  &  & $-$0.056$^{***}$ &  &  &  & $-$0.097$^{***}$ &  \\ 
+  &  &  & (0.020) &  &  &  & (0.033) &  \\ 
+  & & & & & & & & \\ 
+ Impaired Loans (log) &  &  &  & $-$0.312 &  &  &  & $-$1.714$^{***}$ \\ 
+  &  &  &  & (0.195) &  &  &  & (0.516) \\ 
+  & & & & & & & & \\ 
+\hline \\[-1.8ex] 
+Fixed Effects & y & y & y & y & y & y & y & y \\ 
+Observations & 1,374 & 1,374 & 645 & 836 & 248 & 248 & 247 & 205 \\ 
+R$^{2}$ & 0.005 & 0.017 & 0.036 & 0.004 & 0.076 & 0.120 & 0.134 & 0.059 \\ 
+Adjusted R$^{2}$ & $-$0.142 & $-$0.129 & $-$0.118 & $-$0.160 & $-$0.057 & $-$0.011 & 0.004 & $-$0.085 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{8}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 

@@ -1,0 +1,41 @@
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Sat, Mar 18, 2017 - 12:30:41
+\begin{table}[!htbp] \centering 
+  \caption{Regression result from predicting FinStress Variance using annual explanatory variable data} 
+  \label{annual_reg} 
+\tiny 
+\begin{tabular}{@{\extracolsep{5pt}}lcccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{8}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-9} 
+\\[-1.8ex] & \multicolumn{8}{c}{Var(FinStress)$_{year+1}$} \\ 
+ & Full Sample & Full Sample & Full Sample & Full Sample & OECD & OECD & OECD & OECD \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\ 
+\hline \\[-1.8ex] 
+ Var(FinStress)$_{year+0}$ & 0.009 & $-$0.015 & $-$0.079$^{*}$ & 0.076$^{**}$ & 0.038 & $-$0.026 & $-$0.037 & 0.052 \\ 
+  & (0.029) & (0.030) & (0.045) & (0.038) & (0.068) & (0.070) & (0.069) & (0.077) \\ 
+  & & & & & & & & \\ 
+ GDP Growth (\%) & 0.056$^{**}$ & 0.039$^{*}$ &  &  & 0.336$^{***}$ & 0.211$^{**}$ &  &  \\ 
+  & (0.022) & (0.023) &  &  & (0.083) & (0.090) &  &  \\ 
+  & & & & & & & & \\ 
+ FinStress Mean$_{year}$ &  & $-$5.036$^{***}$ & $-$5.639$^{**}$ &  &  & $-$10.174$^{***}$ & $-$7.932$^{**}$ &  \\ 
+  &  & (1.301) & (2.253) &  &  & (3.127) & (3.357) &  \\ 
+  & & & & & & & & \\ 
+ Stock Price Volatility &  &  & $-$0.057$^{***}$ &  &  &  & $-$0.097$^{***}$ &  \\ 
+  &  &  & (0.020) &  &  &  & (0.033) &  \\ 
+  & & & & & & & & \\ 
+ Impaired Loans (log) &  &  &  & $-$0.277 &  &  &  & $-$1.636$^{***}$ \\ 
+  &  &  &  & (0.196) &  &  &  & (0.530) \\ 
+  & & & & & & & & \\ 
+\hline \\[-1.8ex] 
+Fixed Effects & y & y & y & y & y & y & y & y \\ 
+Observations & 1,362 & 1,362 & 645 & 833 & 248 & 248 & 247 & 205 \\ 
+R$^{2}$ & 0.005 & 0.018 & 0.042 & 0.009 & 0.077 & 0.121 & 0.135 & 0.061 \\ 
+Adjusted R$^{2}$ & $-$0.144 & $-$0.131 & $-$0.114 & $-$0.156 & $-$0.060 & $-$0.015 & 0.001 & $-$0.088 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{8}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 

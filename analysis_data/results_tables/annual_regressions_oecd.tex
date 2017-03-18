@@ -1,0 +1,41 @@
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Sat, Mar 18, 2017 - 12:30:43
+\begin{table}[!htbp] \centering 
+  \caption{Regression result from predicting FinStress Variance using annual explanatory variable data (OECD Sample)} 
+  \label{annual_reg} 
+\tiny 
+\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{4}{c}{Var(FinStress)$_{year+1}$} \\ 
+ & OECD & OECD & OECD & OECD \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
+\hline \\[-1.8ex] 
+ Var(FinStress)$_{year+0}$ & 0.038 & $-$0.026 & $-$0.037 & 0.052 \\ 
+  & (0.068) & (0.070) & (0.069) & (0.077) \\ 
+  & & & & \\ 
+ GDP Growth (\%) & 0.336$^{***}$ & 0.211$^{**}$ &  &  \\ 
+  & (0.083) & (0.090) &  &  \\ 
+  & & & & \\ 
+ FinStress Mean$_{year}$ &  & $-$10.174$^{***}$ & $-$7.932$^{**}$ &  \\ 
+  &  & (3.127) & (3.357) &  \\ 
+  & & & & \\ 
+ Stock Price Volatility &  &  & $-$0.097$^{***}$ &  \\ 
+  &  &  & (0.033) &  \\ 
+  & & & & \\ 
+ Impaired Loans (log) &  &  &  & $-$1.636$^{***}$ \\ 
+  &  &  &  & (0.530) \\ 
+  & & & & \\ 
+\hline \\[-1.8ex] 
+Fixed Effects & y & y & y & y \\ 
+Observations & 248 & 248 & 247 & 205 \\ 
+R$^{2}$ & 0.077 & 0.121 & 0.135 & 0.061 \\ 
+Adjusted R$^{2}$ & $-$0.060 & $-$0.015 & 0.001 & $-$0.088 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
