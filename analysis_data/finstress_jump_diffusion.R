@@ -181,8 +181,8 @@ comb <- merge(dj_kpca, lv, by = c('iso2c', 'year'))
 crisis <- comb %>% filter(lv_bank_crisis == 1)
 non_crisis <- comb %>% filter(lv_bank_crisis == 0)
 
+ks.test(crisis$jump, non_crisis$jump, alternative = 'greater')
 ks.test(crisis$diffusion, non_crisis$diffusion, alternative = 'less')
-ks.test(crisis$jump, non_crisis$jump, alternative = 'less')
 ks.test(crisis$total_variance, non_crisis$total_variance,
         alternative = 'greater')
 
