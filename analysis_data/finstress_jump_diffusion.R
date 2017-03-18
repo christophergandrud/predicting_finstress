@@ -13,8 +13,7 @@ library_install(pkgs)
 
 
 # Set working directory of kpca project. Change as needed.
-pos_directs <- c('~/git_repositories/EIUCrisesMeasure/',
-                 '/git_repositories/EIUCrisesMeasure/')
+pos_directs <- c('/git_repositories/predicting_finstress/')
 
 set_valid_wd(pos_directs)
 
@@ -53,16 +52,18 @@ dj_kpca <- sub_ddj(kpca)
 comb_continuous <- gather(dj_kpca, jump_diffusion, value, 3:5)
 
 ## Load Reinhart and Rogoff
-source_url('https://raw.githubusercontent.com/christophergandrud/EIUCrisesMeasure/master/data/alternative_measures/reinhart_rogoff.R')
-rr_bc <- rr_bc %>% filter(RR_BankingCrisis_start >= '2003-01-01')
+# source_url('https://raw.githubusercontent.com/christophergandrud/EIUCrisesMeasure/master/data/alternative_measures/reinhart_rogoff.R')
+# rr_bc <- rr_bc %>% filter(RR_BankingCrisis_start >= '2003-01-01')
 
-rr_bc_start <- rr_bc %>% select(iso2c, RR_BankingCrisis_start) %>%
-                rename(start = RR_BankingCrisis_start)
-rr_bc_end <- rr_bc %>% select(RR_BankingCrisis_end) %>%
-                rename(end = RR_BankingCrisis_end)
+# rr_bc_start <- rr_bc %>% select(iso2c, RR_BankingCrisis_start) %>%
+#                 rename(start = RR_BankingCrisis_start)
+# rr_bc_end <- rr_bc %>% select(RR_BankingCrisis_end) %>%
+#                 rename(end = RR_BankingCrisis_end)
 
-rr_bc <- cbind(rr_bc_start, rr_bc_end)
-rr_bc$Source <- 'Reinhart/Rogoff'
+# rr_bc <- cbind(rr_bc_start, rr_bc_end)
+# rr_bc$Source <- 'Reinhart/Rogoff'
+
+export(rr_bc, file = 'analysis_data/raw_data/rr.csv')
 
 ## Laeven and Valencia
 lv_se <- import('data/alternative_measures/cleaned/laeven_valencia_start_end.csv')
