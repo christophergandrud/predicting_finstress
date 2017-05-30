@@ -8,7 +8,7 @@
 library(simpleSetup)
 
 pkgs <- c('rio', 'dplyr', 'lubridate', 'DataCombine',
-          'countrycode', 'WDI', 'plm', 'stargazer')
+          'countrycode', 'WDI', 'plm', 'stargazer', 'tseries')
 library_install(pkgs)
 
 # Set working directory
@@ -22,8 +22,11 @@ FinStress <- rio::import(
 # Annual data --------
 FinStress$year <- year(FinStress$date)
 
-finstress <- FinStress %>% select(iso2c, date, year, FinStress) %>%
+finstress <- FinStress %>% select(iso3c, date, year, FinStress) %>%
     rename(finstress = FinStress)
+
+finstress$iso2c <- countrycode(finstress$iso3c, origin = 'iso3c', 
+                         destination = 'iso2c', warn = TRUE)
 
 # Annual mean
 finstress_yr_mean <- finstress %>% group_by(iso2c, year) %>%
@@ -50,6 +53,13 @@ finstress_yr <- finstress_yr %>% arrange(iso2c, year)
 
 FindDups(finstress_yr, Vars = c('iso2c', 'year'))
 
+# Check stationarity of FinStress Var
+for (i in unique(finstress_yr$iso2c)) {
+    message(i)
+    sub <- subset(finstress_yr, iso2c == i)
+    sub <- sub[complete.cases(sub), ]
+    print(adf.test(sub$finstress_var))
+}
 
 # Lags and leads
 finstress_yr <- slide(finstress_yr, Var = 'finstress_var', GroupVar = 'iso2c',
@@ -107,11 +117,14 @@ comb <- import('combined_data.csv')
 
 comb_high <- comb %>% filter(income == 'High income: OECD')
 
+# Drop non-countries
+comb <- subset(comb, iso3c != "")
+
 # Simple regression model ------------------------------------------------------
 # Full sample --
 
 ## GDP and FinStress
-comb_pd <- pdata.frame(comb, index = c('iso2c', 'year'))
+comb_pd <- pdata.frame(comb, index = c('iso3c', 'year'))
 mfull_1 <- plm(finstress_var_lead1yr ~ finstress_var + gdp_growth,
                data = comb_pd)
 mfull_2 <- plm(finstress_var_lead1yr ~ finstress_var + gdp_growth +

@@ -12,4 +12,4 @@
 vignettes/*.html
 vignettes/*.pdf
 
-DS_Store
+.DS_Store

@@ -46,6 +46,9 @@ kpca <- rio::import(
     "https://raw.githubusercontent.com/christophergandrud/EIUCrisesMeasure/master/data/FinStress.csv")
 kpca$date <- ymd(kpca$date)
 
+finstress$iso2c <- countrycode(finstress$iso3c, origin = 'iso3c', 
+                               destination = 'iso2c')
+
 # Remove problem countries
 dj_kpca <- sub_ddj(kpca)
 
