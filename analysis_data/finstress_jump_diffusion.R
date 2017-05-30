@@ -66,10 +66,13 @@ comb_continuous <- gather(dj_kpca, jump_diffusion, value, 3:5)
 # rr_bc <- cbind(rr_bc_start, rr_bc_end)
 # rr_bc$Source <- 'Reinhart/Rogoff'
 
-export(rr_bc, file = 'analysis_data/raw_data/rr.csv')
+# export(rr_bc, file = 'analysis_data/raw_data/rr.csv')
+rr_bc <- import(file = 'analysis_data/raw_data/rr.csv')
+rr_bc$start <- ymd(rr_bc$start)
+rr_bc$end <- ymd(rr_bc$end)
 
 ## Laeven and Valencia
-lv_se <- import('data/alternative_measures/cleaned/laeven_valencia_start_end.csv')
+lv_se <- import('analysis_data/raw_data/laeven_valencia_start_end.csv')
 lv_se$Start <- ymd(lv_se$Start)
 lv_se$End <- ymd(lv_se$End)
 lv_se <- lv_se %>% filter(Start >= '2003-01-01')
@@ -86,13 +89,21 @@ comb_se <- rbind(rr_bc, lv_se)
 
 comb_se$country <- countrycode(comb_se$iso2c, origin = 'iso2c',
                                  destination = 'country.name')
+comb_continuous$country <- countrycode(comb_continuous$country,
+                                       origin = 'country.name',
+                                       destination = 'country.name')
+comb_se$country[comb_se$country == 'United Kingdom of Great Britain and Northern Ireland'] <- 'United Kingdom'
+comb_continuous$country[comb_continuous$country == 'United Kingdom of Great Britain and Northern Ireland'] <- 'United Kingdom'
+
 
 #### Compare to LV ####
-compare_to_dummy <- function(data_cont, data_dummy, id,
-                             jd = 'diffusion') {
+compare_to_dummy <- function(data_cont, data_dummy, id, jd = 'diffusion') {
+
     temp_cont <- subset(data_cont, country == id)
     temp_cont <- subset(temp_cont, jump_diffusion == jd)
     temp_dummy <- subset(data_dummy, country == id)
+
+    temp_cont$date <- ymd(temp_cont$date)
 
     if (nrow(temp_dummy) == 0) {
         ggplot(data = temp_cont, aes(date, value)) +
@@ -101,7 +112,7 @@ compare_to_dummy <- function(data_cont, data_dummy, id,
             ggtitle(id) + xlab('') + ylab(sprintf('%s\n', jd)) +
             theme_bw() +
             theme(legend.position = "none")
-    } else if (nrow(temp_dummy)) {
+    } else if (nrow(temp_dummy) > 0) {
         ggplot() +
             geom_line(data = temp_cont, aes(date, value), alpha = 0.6) +
             geom_rect(data = temp_dummy, aes(xmin = start, xmax = end,
@@ -116,10 +127,11 @@ compare_to_dummy <- function(data_cont, data_dummy, id,
     }
 }
 
-country_vector <- unique(kpca$country)
+country_vector <- unique(comb_continuous$country)
 kpca_list <- list()
 for (i in country_vector) {
  message(i)
+
  kpca_list[[i]] <- suppressMessages(
          compare_to_dummy(data_cont = comb_continuous,
                           data_dummy = comb_se,
@@ -143,15 +155,15 @@ select_countries_2 <- c('Kazakhstan', 'Latvia', 'Lithuania', 'Luxembourg',
 select_countries_3 <- c('Austria', 'Belgium', 'Denmark', 'France', 'Germany',
                         'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy',
                         'Latvia', 'Luxembourg', 'Netherlands', 'Portugal',
-                        'Spain', 'Switzerland', 'Ukraine', 'United Kingdom',
-                        'United States'
+                        'Spain', 'Switzerland', 'Ukraine',
+                        'United Kingdom', 'United States of America'
                         )
 
 do.call(grid.arrange, kpca_list[select_countries_1])
 
 do.call(grid.arrange, kpca_list[select_countries_2])
 
-pdf(file = 'summary_paper/figures/compare_jump_to_crisis.pdf',
+pdf(file = 'analysis_data/results_figures/compare_jump_to_crisis.pdf',
     width = 17, height = 15)
     do.call(grid.arrange, kpca_list[select_countries_3])
 dev.off()
@@ -164,7 +176,7 @@ dj_kpca$iso2c <- countrycode(dj_kpca$country, origin = 'country.name',
 dj_kpca$year <- year(dj_kpca$date)
 
 ## Laeven and Valencia
-lv <- import('data/alternative_measures/cleaned/laeven_valencia_banking_crisis.csv')
+lv <- import('analysis_data/raw_data/laeven_valencia_banking_crisis.csv')
 
 comb <- merge(dj_kpca, lv, by = c('iso2c', 'year'))
 
@@ -172,8 +184,8 @@ comb <- merge(dj_kpca, lv, by = c('iso2c', 'year'))
 crisis <- comb %>% filter(lv_bank_crisis == 1)
 non_crisis <- comb %>% filter(lv_bank_crisis == 0)
 
+ks.test(crisis$jump, non_crisis$jump, alternative = 'greater')
 ks.test(crisis$diffusion, non_crisis$diffusion, alternative = 'less')
-ks.test(crisis$jump, non_crisis$jump, alternative = 'less')
 ks.test(crisis$total_variance, non_crisis$total_variance,
         alternative = 'greater')
 
@@ -196,7 +208,7 @@ ggplot(comb_gathered, aes(value, colour = lv_bank_crisis)) +
     guides(color = guide_legend(title = 'Laeven/Valencia'),
            linetype = guide_legend(title = 'Laeven/Valencia'))
 
-ggsave('summary_paper/figures/compare_jump_diffusion_basic.pdf')
+ggsave('analysis_data/results_figures/compare_jump_diffusion_basic.pdf')
 
 #### Compare with WDI income groups
 # Gather and clean income groupd data
