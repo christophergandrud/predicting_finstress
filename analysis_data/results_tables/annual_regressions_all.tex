@@ -1,6 +1,6 @@
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sat, Mar 18, 2017 - 12:30:42
+% Date and time: Tue, May 30, 2017 - 16:55:22
 \begin{table}[!htbp] \centering 
   \caption{Regression result from predicting FinStress Variance using annual explanatory variable data (Full Sample)} 
   \label{annual_reg} 
@@ -14,26 +14,30 @@
  & Full Sample & Full Sample & Full Sample & Full Sample \\ 
 \\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
 \hline \\[-1.8ex] 
- Var(FinStress)$_{year+0}$ & 0.009 & $-$0.015 & $-$0.079$^{*}$ & 0.076$^{**}$ \\ 
-  & (0.029) & (0.030) & (0.045) & (0.038) \\ 
+ Var(FinStress)$_{year+0}$ & $-$0.017 & $-$0.087$^{***}$ & $-$0.160$^{***}$ & $-$0.031 \\ 
+  & (0.029) & (0.030) & (0.043) & (0.038) \\ 
   & & & & \\ 
- GDP Growth (\%) & 0.056$^{**}$ & 0.039$^{*}$ &  &  \\ 
-  & (0.022) & (0.023) &  &  \\ 
+ GDP Growth (\%) & 0.098$^{***}$ & 0.044 &  &  \\ 
+  & (0.032) & (0.032) &  &  \\ 
   & & & & \\ 
- FinStress Mean$_{year}$ &  & $-$5.036$^{***}$ & $-$5.639$^{**}$ &  \\ 
-  &  & (1.301) & (2.253) &  \\ 
+ FinStress Mean$_{year}$ &  & $-$12.860$^{***}$ & $-$17.713$^{***}$ &  \\ 
+  &  & (1.619) & (2.587) &  \\ 
   & & & & \\ 
- Stock Price Volatility &  &  & $-$0.057$^{***}$ &  \\ 
-  &  &  & (0.020) &  \\ 
+ Stock Price Volatility &  &  &  & $-$0.482 \\ 
+  &  &  &  & (0.334) \\ 
   & & & & \\ 
- Impaired Loans (log) &  &  &  & $-$0.277 \\ 
-  &  &  &  & (0.196) \\ 
+ Impaired Loans (log) &  &  & $-$0.059$^{**}$ &  \\ 
+  &  &  & (0.028) &  \\ 
+  & & & & \\ 
+ Constant & 7.337$^{***}$ & 14.861$^{***}$ & 19.442$^{***}$ & 2.547 \\ 
+  & (1.821) & (2.012) & (2.633) & (2.148) \\ 
   & & & & \\ 
 \hline \\[-1.8ex] 
 Fixed Effects & y & y & y & y \\ 
-Observations & 1,362 & 1,362 & 645 & 833 \\ 
-R$^{2}$ & 0.005 & 0.018 & 0.042 & 0.009 \\ 
-Adjusted R$^{2}$ & $-$0.144 & $-$0.131 & $-$0.114 & $-$0.156 \\ 
+Observations & 1,358 & 1,358 & 646 & 815 \\ 
+R$^{2}$ & 0.304 & 0.339 & 0.310 & 0.258 \\ 
+Adjusted R$^{2}$ & 0.200 & 0.240 & 0.198 & 0.135 \\ 
+Residual Std. Error & 5.090 (df = 1180) & 4.962 (df = 1179) & 5.965 (df = 555) & 5.876 (df = 698) \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 

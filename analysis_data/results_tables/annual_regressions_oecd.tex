@@ -1,6 +1,6 @@
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sat, Mar 18, 2017 - 12:30:43
+% Date and time: Tue, May 30, 2017 - 16:55:22
 \begin{table}[!htbp] \centering 
   \caption{Regression result from predicting FinStress Variance using annual explanatory variable data (OECD Sample)} 
   \label{annual_reg} 
@@ -14,26 +14,30 @@
  & OECD & OECD & OECD & OECD \\ 
 \\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
 \hline \\[-1.8ex] 
- Var(FinStress)$_{year+0}$ & 0.038 & $-$0.026 & $-$0.037 & 0.052 \\ 
-  & (0.068) & (0.070) & (0.069) & (0.077) \\ 
+ GDP Growth (\%) & $-$0.092 & $-$0.212$^{***}$ & $-$0.222$^{***}$ & $-$0.134$^{*}$ \\ 
+  & (0.068) & (0.068) & (0.068) & (0.076) \\ 
   & & & & \\ 
- GDP Growth (\%) & 0.336$^{***}$ & 0.211$^{**}$ &  &  \\ 
-  & (0.083) & (0.090) &  &  \\ 
+ FinStress Mean$_{year}$ & 0.712$^{***}$ & 0.264 &  &  \\ 
+  & (0.157) & (0.171) &  &  \\ 
   & & & & \\ 
- FinStress Mean$_{year}$ &  & $-$10.174$^{***}$ & $-$7.932$^{**}$ &  \\ 
-  &  & (3.127) & (3.357) &  \\ 
+ Stock Price Volatility &  & $-$23.249$^{***}$ & $-$22.528$^{***}$ &  \\ 
+  &  & (4.395) & (4.777) &  \\ 
   & & & & \\ 
- Stock Price Volatility &  &  & $-$0.097$^{***}$ &  \\ 
-  &  &  & (0.033) &  \\ 
+ Impaired Loans (log) &  &  & $-$0.092 &  \\ 
+  &  &  & (0.063) &  \\ 
   & & & & \\ 
- Impaired Loans (log) &  &  &  & $-$1.636$^{***}$ \\ 
-  &  &  &  & (0.530) \\ 
+ Liquid Assets Ratio &  &  &  & $-$3.848$^{***}$ \\ 
+  &  &  &  & (1.035) \\ 
+  & & & & \\ 
+ Constant & 10.040$^{***}$ & 22.155$^{***}$ & 24.519$^{***}$ & 17.860$^{***}$ \\ 
+  & (2.932) & (3.589) & (3.364) & (3.640) \\ 
   & & & & \\ 
 \hline \\[-1.8ex] 
 Fixed Effects & y & y & y & y \\ 
 Observations & 248 & 248 & 247 & 205 \\ 
-R$^{2}$ & 0.077 & 0.121 & 0.135 & 0.061 \\ 
-Adjusted R$^{2}$ & $-$0.060 & $-$0.015 & 0.001 & $-$0.088 \\ 
+R$^{2}$ & 0.242 & 0.330 & 0.328 & 0.212 \\ 
+Adjusted R$^{2}$ & 0.129 & 0.226 & 0.223 & 0.087 \\ 
+Residual Std. Error & 7.953 (df = 215) & 7.497 (df = 214) & 7.517 (df = 213) & 8.560 (df = 176) \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 

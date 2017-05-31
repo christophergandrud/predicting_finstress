@@ -8,7 +8,7 @@
 library(simpleSetup)
 
 pkgs <- c('rio', 'dplyr', 'lubridate', 'DataCombine',
-          'countrycode', 'WDI', 'stargazer', 'tseries')
+          'countrycode', 'WDI', 'plm', 'stargazer', 'tseries')
 library_install(pkgs)
 
 # Set working directory
@@ -22,11 +22,11 @@ FinStress <- rio::import(
 # Annual data --------
 FinStress$year <- year(FinStress$date)
 
-FinStress$iso2c <- countrycode(FinStress$iso3c, origin = 'iso3c',
-                               destination = 'iso2c', warn = TRUE)
-
-finstress <- FinStress %>% select(iso2c, date, year, FinStress) %>%
+finstress <- FinStress %>% select(iso3c, date, year, FinStress) %>%
     rename(finstress = FinStress)
+
+finstress$iso2c <- countrycode(finstress$iso3c, origin = 'iso3c', 
+                         destination = 'iso2c', warn = TRUE)
 
 # Annual mean
 finstress_yr_mean <- finstress %>% group_by(iso2c, year) %>%
@@ -117,100 +117,97 @@ comb <- import('combined_data.csv')
 
 comb_high <- comb %>% filter(income == 'High income: OECD')
 
-# Drop non-countries
-comb <- subset(comb, iso3c != "")
-
 # Simple regression model ------------------------------------------------------
 # Full sample --
 
 ## GDP and FinStress
-mfull_1 <- lm(finstress_var_lead1yr ~ finstress_var + gdp_growth + iso2c,
-               data = comb)
-mfull_2 <- lm(finstress_var_lead1yr ~ finstress_var + gdp_growth +
-                   finstress_mean + iso2c, data = comb)
-mfull_3 <- lm(finstress_var_lead1yr ~ finstress_var + finstress_mean +
-                   stock_price_volatility + iso2c, data = comb)
+comb_pd <- pdata.frame(comb, index = c('iso2c', 'year'))
+mfull_1 <- plm(finstress_var_lead1yr ~ finstress_var + gdp_growth,
+               data = comb_pd)
+mfull_2 <- plm(finstress_var_lead1yr ~ finstress_var + gdp_growth +
+                   finstress_mean, data = comb_pd)
+mfull_3 <- plm(finstress_var_lead1yr ~ finstress_var + finstress_mean +
+                   stock_price_volatility, data = comb_pd)
 ## CAMELS
-mfull_4 <- lm(finstress_var_lead1yr ~ finstress_var + log_imploans + iso2c,
-               data = comb)
+mfull_4 <- plm(finstress_var_lead1yr ~ finstress_var + log_imploans,
+               data = comb_pd)
 
 # Using Stand. Dev. instead of Variance
-mfull_1_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth + iso2c,
-                  data = comb)
-mfull_2_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth +
-                      finstress_mean + iso2c, data = comb)
-mfull_3_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + finstress_mean +
-                  stock_price_volatility + iso2c, data = comb)
-mfull_4_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + log_imploans + iso2c,
-                  data = comb)
-mfull_5_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + Liquid + iso2c,
-                  data = comb)
+mfull_1_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth,
+                  data = comb_pd)
+mfull_2_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth +
+                      finstress_mean, data = comb_pd)
+mfull_3_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + finstress_mean +
+                  stock_price_volatility, data = comb_pd)
+mfull_4_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + log_imploans,
+                  data = comb_pd)
+mfull_5_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + Liquid,
+                  data = comb_pd)
 
 # High Income
 
 ## GDP and FinStress
-moecd_1 <- lm(finstress_var_lead1yr ~ finstress_var + gdp_growth + iso2c,
-               data = comb_high)
-moecd_2 <- lm(finstress_var_lead1yr ~ finstress_var + gdp_growth  +
-                   finstress_mean + iso2c, data = comb_high)
-moecd_3 <- lm(finstress_var_lead1yr ~ finstress_var +
-                   finstress_mean + stock_price_volatility + iso2c,
-               data = comb_high)
+comb_high_pd <- pdata.frame(comb_high, index = c('iso2c', 'year'))
+moecd_1 <- plm(finstress_var_lead1yr ~ finstress_var + gdp_growth,
+               data = comb_high_pd)
+moecd_2 <- plm(finstress_var_lead1yr ~ finstress_var + gdp_growth  +
+                   finstress_mean, data = comb_high_pd)
+moecd_3 <- plm(finstress_var_lead1yr ~ finstress_var +
+                   finstress_mean + stock_price_volatility,
+               data = comb_high_pd)
 
 ## CAMELS
-moecd_4 <- lm(finstress_var_lead1yr ~ finstress_var +  log_imploans + iso2c,
-               data = comb_high)
+moecd_4 <- plm(finstress_var_lead1yr ~ finstress_var + log_imploans,
+               data = comb_high_pd)
 
 # Using Stand. Dev. instead of Variance
-mfull_1_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth + iso2c,
-                  data = comb)
-mfull_2_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth +
-                      finstress_mean + iso2c, data = comb)
-mfull_3_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + log_imploans + iso2c,
-                  data = comb)
+mfull_1_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth,
+                  data = comb_pd)
+mfull_2_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth +
+                      finstress_mean, data = comb_pd)
+mfull_3_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + log_imploans,
+                  data = comb_pd)
 
-moecd_1_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth + iso2c,
-                  data = comb_high)
-moecd_2_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth  +
-                   finstress_mean + iso2c, data = comb_high)
+moecd_1_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth,
+                  data = comb_high_pd)
+moecd_2_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + gdp_growth  +
+                   finstress_mean, data = comb_high_pd)
 
-moecd_3_sd <- lm(finstress_sd_lead1yr ~ finstress_sd + log_imploans + iso2c,
-               data = comb_high)
+moecd_3_sd <- plm(finstress_sd_lead1yr ~ finstress_sd + log_imploans,
+               data = comb_high_pd)
 
 ## No lagged DV ------------
-mfull_nolagdv_1 <- lm(finstress_var_lead1yr ~ gdp_growth + iso2c,
-               data = comb)
-mfull_nolagdv_2 <- lm(finstress_var_lead1yr ~ gdp_growth +
-                   finstress_mean + iso2c, data = comb)
-mfull_nolagdv_3 <- lm(finstress_var_lead1yr ~ finstress_mean +
-                   stock_price_volatility + iso2c, data = comb)
+mfull_nolagdv_1 <- plm(finstress_var_lead1yr ~ gdp_growth,
+               data = comb_pd)
+mfull_nolagdv_2 <- plm(finstress_var_lead1yr ~ gdp_growth +
+                   finstress_mean, data = comb_pd)
+mfull_nolagdv_3 <- plm(finstress_var_lead1yr ~ finstress_mean +
+                   stock_price_volatility, data = comb_pd)
 
-mfull_nolagdv_4 <- lm(finstress_var_lead1yr ~ log_imploans + iso2c,
-               data = comb)
+mfull_nolagdv_4 <- plm(finstress_var_lead1yr ~ log_imploans,
+               data = comb_pd)
 
-moecd_nolagdv_1 <- lm(finstress_var_lead1yr ~ gdp_growth + iso2c,
-             data = comb_high)
-moecd_nolagdv_2 <- lm(finstress_var_lead1yr ~ gdp_growth  +
-                 finstress_mean + iso2c, data = comb_high)
-moecd_nolagdv_3 <- lm(finstress_var_lead1yr ~ finstress_mean +
-             stock_price_volatility + iso2c,
-             data = comb_high)
-moecd_nolagdv_4 <- lm(finstress_var_lead1yr ~ log_imploans + iso2c,
-           data = comb_high)
+moecd_nolagdv_1 <- plm(finstress_var_lead1yr ~ gdp_growth,
+             data = comb_high_pd)
+moecd_nolagdv_2 <- plm(finstress_var_lead1yr ~ gdp_growth  +
+                 finstress_mean, data = comb_high_pd)
+moecd_nolagdv_3 <- plm(finstress_var_lead1yr ~ finstress_mean + stock_price_volatility,
+             data = comb_high_pd)
+moecd_nolagdv_4 <- plm(finstress_var_lead1yr ~ log_imploans,
+           data = comb_high_pd)
 
 
 ## Annual For Paper ------
-stargazer(mfull_nolagdv_1, mfull_nolagdv_2, mfull_nolagdv_3, mfull_nolagdv_4,
-          moecd_nolagdv_1, moecd_nolagdv_2, moecd_nolagdv_3, moecd_nolagdv_4,
-          omit = 'iso2c*',
+stargazer(mfull_1, mfull_2, mfull_3, mfull_4,
+          moecd_1, moecd_2, moecd_3, moecd_4,
           type = 'latex',
           dep.var.labels = 'Var(FinStress)$_{year+1}$',
-          covariate.labels = c('GDP Growth (\\%)', 
-                               'FinStress Mean$_{year}$',
+          covariate.labels = c('Var(FinStress)$_{year+0}$',
+                               'GDP Growth (\\%)', 'FinStress Mean$_{year}$',
                                'Stock Price Volatility',
                                'Impaired Loans (log)') ,
           column.labels = c(rep('Full Sample', 4), rep('OECD', 4)),
-          add.lines = list(c('Country FE', rep('y', 8))),
+          add.lines = list(c('Fixed Effects', rep('y', 8))),
           label = 'annual_reg',
           title = 'Regression result from predicting FinStress Variance using annual explanatory variable data',
           out = 'results_tables/annual_regressions.tex',
@@ -221,7 +218,6 @@ stargazer(mfull_nolagdv_1, mfull_nolagdv_2, mfull_nolagdv_3, mfull_nolagdv_4,
 ## Annual No Lagged DV For Paper ------
 stargazer(mfull_nolagdv_1, mfull_nolagdv_2, mfull_nolagdv_3, mfull_nolagdv_4,
           moecd_nolagdv_1, moecd_nolagdv_2, moecd_nolagdv_3, moecd_nolagdv_4,
-          omit = 'iso2c*',
           type = 'latex',
           dep.var.labels = 'Var(FinStress)$_{year+1}$',
           covariate.labels = c('GDP Growth (\\%)', 'FinStress Mean$_{year}$',
@@ -238,7 +234,6 @@ stargazer(mfull_nolagdv_1, mfull_nolagdv_2, mfull_nolagdv_3, mfull_nolagdv_4,
 
 ## Annual For Presentation ------
 stargazer(mfull_1, mfull_2, mfull_3, mfull_4,
-          omit = 'iso2c*',
           type = 'latex',
           dep.var.labels = 'Var(FinStress)$_{year+1}$',
           covariate.labels = c('Var(FinStress)$_{year+0}$',
@@ -256,14 +251,12 @@ stargazer(mfull_1, mfull_2, mfull_3, mfull_4,
 
 ## Annual For Paper ------
 stargazer(moecd_1, moecd_2, moecd_3, moecd_4,
-          omit = 'iso2c*',
           type = 'latex',
           dep.var.labels = 'Var(FinStress)$_{year+1}$',
-          covariate.labels = c('GDP Growth (\\%)',
-                               'FinStress Mean$_{year}$',
+          covariate.labels = c('Var(FinStress)$_{year+0}$',
+                               'GDP Growth (\\%)', 'FinStress Mean$_{year}$',
                                'Stock Price Volatility',
-                               'Impaired Loans (log)',
-                               'Liquid Assets Ratio') ,
+                               'Impaired Loans (log)', 'Liquid Assets Ratio') ,
           column.labels = rep('OECD', 4),
           add.lines = list(c('Fixed Effects', rep('y', 4))),
           label = 'annual_reg',
@@ -325,20 +318,22 @@ comb_qt <- merge(oecd, finstress_qt, by = c('iso2c', 'quarter'))
 comb_qt <- DropNA(comb_qt, 'iso2c') # NA is Euro area
 
 # Quarterly regressions -------
-mqt_1 <- lm(finstress_var_lead1qt ~ gdp_growth_oecd + iso2c,
-             data = comb_qt)
+comb_qt_pd <- pdata.frame(comb_qt, index = c('iso2c', 'quarter'))
 
-mqt_2 <- lm(finstress_var_lead1qt ~ gdp_growth_oecd +
-                 finstress_mean + iso2c,
-             data = comb_qt)
+mqt_1 <- plm(finstress_var_lead1qt ~ finstress_var + gdp_growth_oecd,
+             data = comb_qt_pd)
+
+mqt_2 <- plm(finstress_var_lead1qt ~ finstress_var + gdp_growth_oecd +
+                 finstress_mean,
+             data = comb_qt_pd)
 
 
 stargazer(mqt_1, mqt_2, type = 'latex',
-          omit = 'iso2c*',
           dep.var.labels = 'Var(FinStress)$_{quarter+1}$',
-          covariate.labels = c('GDP Growth (\\%)',
+          covariate.labels = c('Var(FinStress)$_{quarter + 0}$',
+                               'GDP Growth (\\%)',
                                 'FinStress Mean$_{quarter + 0}$'),
-          add.lines = list(c('Country FE', 'y', 'y')),
+          add.lines = list(c('Fixed Effects', 'y', 'y')),
           label = 'quarterly_reg',
           title = 'Regression result from predicting FinStress Variance using quarterly explanatory variable data (OECD only)',
           out = 'results_tables/quarterly_regressions.tex',

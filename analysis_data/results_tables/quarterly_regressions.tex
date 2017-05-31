@@ -1,6 +1,6 @@
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sat, Mar 18, 2017 - 12:30:44
+% Date and time: Tue, May 30, 2017 - 16:57:09
 \begin{table}[!htbp] \centering 
   \caption{Regression result from predicting FinStress Variance using quarterly explanatory variable data (OECD only)} 
   \label{quarterly_reg} 
@@ -13,20 +13,21 @@
 \\[-1.8ex] & \multicolumn{2}{c}{Var(FinStress)$_{quarter+1}$} \\ 
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- Var(FinStress)$_{quarter + 0}$ & 0.090$^{***}$ & 0.066$^{**}$ \\ 
-  & (0.027) & (0.027) \\ 
+ GDP Growth (\%) & 0.182$^{***}$ & 0.064 \\ 
+  & (0.043) & (0.047) \\ 
   & & \\ 
- GDP Growth (\%) & 0.102$^{***}$ & 0.043 \\ 
-  & (0.027) & (0.029) \\ 
+ FinStress Mean$_{quarter + 0}$ &  & $-$7.702$^{***}$ \\ 
+  &  & (1.278) \\ 
   & & \\ 
- FinStress Mean$_{quarter + 0}$ &  & $-$5.569$^{***}$ \\ 
-  &  & (1.065) \\ 
+ Constant & 1.049 & 6.211$^{***}$ \\ 
+  & (1.133) & (1.408) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Fixed Effects & y & y \\ 
-Observations & 1,237 & 1,237 \\ 
-R$^{2}$ & 0.023 & 0.045 \\ 
-Adjusted R$^{2}$ & $-$0.014 & 0.008 \\ 
+Country FE & y & y \\ 
+Observations & 1,323 & 1,323 \\ 
+R$^{2}$ & 0.103 & 0.128 \\ 
+Adjusted R$^{2}$ & 0.073 & 0.098 \\ 
+Residual Std. Error & 6.081 (df = 1278) & 5.998 (df = 1277) \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
